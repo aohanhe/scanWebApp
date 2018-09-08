@@ -92,11 +92,11 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 				throw new ScanElectricityException("opendid 对应的用户不存在");
 
 			ScanServerUserDetails details = new ScanServerUserDetails();
-			details.setUsername(userItem.getUserName());
+			details.setUsername(userItem.getName());
 			details.setPassword("");
 
 			
-			details.setName(userItem.getUserName());
+			details.setName(userItem.getName());
 			details.setOperatorId(0);
 			details.setOperatorName("");
 			details.setUserType(UserType.WxMinAppUser);
