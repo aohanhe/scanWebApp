@@ -43,6 +43,16 @@ public class Result<T> extends BaseResult {
 	}
 	
 	/**
+	 * 构造一个标准错误
+	 * @param message
+	 * @return
+	 * @throws ScanElectricityException
+	 */
+	public static<T> Result fail(String message) throws ScanElectricityException{
+		return new Result(500,message);		
+	}
+	
+	/**
 	 * 构造一个成功结果
 	 * @param data
 	 * @return
