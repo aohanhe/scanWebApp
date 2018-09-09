@@ -29,6 +29,8 @@ spring:
     host: 183.237.21.252
     port: 6379
     database: 2
+    
+    
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
