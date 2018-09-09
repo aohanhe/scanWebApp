@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ao.QueryDslRootPaths;
 import com.ao.scanElectricityBis.base.ScanElectricityException;
 import com.ao.scanElectricityBis.entity.AccountExpense;
 import com.ao.scanElectricityBis.service.ExpensesService;
@@ -16,6 +17,7 @@ import com.ao.scanWebApp.Result;
 
 import ao.jpaQueryHelper.PageJpaQueryBean;
 import ao.jpaQueryHelper.PagerResult;
+import ao.jpaQueryHelper.annotations.EntityPath;
 import ao.jpaQueryHelper.annotations.JpaQueryBean;
 import ao.jpaQueryHelper.annotations.Like;
 import io.swagger.annotations.Api;
@@ -34,20 +36,28 @@ public class ExpenseControl {
 	private ExpensesService service;
 	
 	@ApiModel("查询数据对象")
-	@JpaQueryBean(entityClass=AccountExpense.class)
+	@JpaQueryBean(entityClass=AccountExpense.class,mainRootPath=QueryDslRootPaths.Root_Expense)
 	public static class QueryData extends PageJpaQueryBean{
 		@ApiModelProperty(name="用户ID",dataType="int")	
 		private Integer userId=null;
+		@EntityPath(rootPath=QueryDslRootPaths.Root_UserInfo)
 		@Like
 		@ApiModelProperty(name="用户名",dataType="string")	
 		private String userName;
+		
+		@EntityPath(rootPath=QueryDslRootPaths.Root_UserInfo)
 		@ApiModelProperty(name="电话",dataType="string")	
 		@Like
 		private String phone;
+		
+		@EntityPath(rootPath=QueryDslRootPaths.Root_Station)
 		@ApiModelProperty(name="运营商ID",dataType="int")	
 		private Integer operatorId;
+		
 		@ApiModelProperty(name="站场ID",dataType="int")
 		private Integer stationId;
+		
+		@EntityPath(rootPath=QueryDslRootPaths.Root_Station)
 		@ApiModelProperty(name="地区编码",dataType="string")
 		@Like(isStartWith=true)
 		private String regionCode;

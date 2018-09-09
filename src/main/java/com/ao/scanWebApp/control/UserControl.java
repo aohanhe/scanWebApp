@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ao.QueryDslRootPaths;
 import com.ao.scanElectricityBis.auth.ScanServerPrincipalManger;
 import com.ao.scanElectricityBis.base.ScanElectricityException;
 import com.ao.scanElectricityBis.entity.QUserInfo;
@@ -42,7 +43,7 @@ public class UserControl {
 	private static Logger logger=LoggerFactory.getLogger(UserControl.class);
 	
 	@ApiModel("查询数据对象")
-	@JpaQueryBean(entityClass = UserInfo.class)
+	@JpaQueryBean(entityClass = UserInfo.class,mainRootPath=QueryDslRootPaths.Root_UserInfo)
 	public static class QueryData extends PageJpaQueryBean {
 		
 		@ApiModelProperty(name = "名称", dataType = "string")
