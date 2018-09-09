@@ -29,7 +29,13 @@ spring:
     host: 183.237.21.252
     port: 6379
     database: 2
-    
+    lettuce:
+      pool:
+        max-active: 5
+        max-idle: 5
+        min-idle: 1
+        max-wait: 5000        
+        
     
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
