@@ -24,7 +24,11 @@ spring:
     mongodb:
       host: 183.237.21.252
       port: 27017
-      database: Test_Mongodb
+      database: admin
+      username: mongo-admin
+      password: mongo-password
+      
+      
   redis:
     host: 183.237.21.252
     port: 6379
