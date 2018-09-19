@@ -52,6 +52,9 @@ dependencies {
 	compile('com.sun.xml.bind:jaxb-core')
 	compile('javax.activation:activation')
 	
+	compile('com.github.binarywang:weixin-java-miniapp:3.1.0')
+	compile('com.github.binarywang:weixin-java-pay:3.1.0')
+	
 	runtime('org.springframework.boot:spring-boot-devtools')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')

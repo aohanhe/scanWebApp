@@ -1,9 +1,12 @@
 package com.ao.scanWebApp.control;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,7 @@ public class ExpenseControl {
 	@ApiModel("查询数据对象")
 	@JpaQueryBean(entityClass=AccountExpense.class,mainRootPath=QueryDslRootPaths.Root_Expense)
 	public static class QueryData extends PageJpaQueryBean{
-		@ApiModelProperty(name="用户ID",dataType="int")	
+		@ApiModelProperty(name="用户ID",dataType="int")		
 		private Integer userId=null;
 		@EntityPath(rootPath=QueryDslRootPaths.Root_UserInfo)
 		@Like
@@ -50,14 +53,15 @@ public class ExpenseControl {
 		@Like
 		private String phone;
 		
-		@EntityPath(rootPath=QueryDslRootPaths.Root_Station)
+		@EntityPath(name="operatorid",rootPath=QueryDslRootPaths.Root_Station)
 		@ApiModelProperty(name="运营商ID",dataType="int")	
 		private Integer operatorId;
 		
+		@EntityPath(rootPath=QueryDslRootPaths.Root_Device)
 		@ApiModelProperty(name="站场ID",dataType="int")
 		private Integer stationId;
 		
-		@EntityPath(rootPath=QueryDslRootPaths.Root_Station)
+		@EntityPath(name="regioncode",rootPath=QueryDslRootPaths.Root_Station)
 		@ApiModelProperty(name="地区编码",dataType="string")
 		@Like(isStartWith=true)
 		private String regionCode;
@@ -113,6 +117,18 @@ public class ExpenseControl {
 			logger.error("查询消费记录出错:"+e.getMessage(),e);
 			return Result.fail("查询消费记录出错:"+e.getMessage());
 		}	
+	}
+	
+	/*
+	 * 返回用户总的花费数据
+	 */
+	@RequestMapping("totalCost/{userId}")	
+	public Result<HashMap<String, Object>> getTotalTimeAndMoney(@ApiParam @PathVariable int userId) {
+		HashMap<String, Object> re=new HashMap<>();
+		var data= service.getTotalTimeAndMoney(userId);
+		re.put("cost",data.getFirst());
+		re.put("time",data.getSecond());
+		return Result.success(re);
 	}
 
 }

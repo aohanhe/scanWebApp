@@ -33,7 +33,7 @@ public class ScanWebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.requestMatchers().anyRequest()
 			.and()
 			.authorizeRequests()
-			.antMatchers("/oauth/*","/api/test/**").permitAll();
+			.antMatchers("/oauth/*","/api/test/**","/api/wx/**").permitAll();
 	}
 
 	

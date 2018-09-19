@@ -25,16 +25,21 @@ spring:
       host: 183.237.21.252
       port: 27017
       database: admin
+#      authentication-database: Test_Mongodb
       username: mongo-admin
       password: mongo-password
+#      username: test
+#      password: 123456
       
       
   redis:
     host: 183.237.21.252
     port: 6379
     database: 2
+    
     lettuce:
       pool:
+        max-total: 5
         max-active: 5
         max-idle: 5
         min-idle: 1
@@ -57,4 +62,16 @@ server:
     key-store-password: 123456
     key-store-type: PKCS12
     key-alias: tomcat
-    
+
+wxconfig:
+  appid: wx9de5e895e731c84c
+  secret: 77681fcc30d6516585b937402391fe39
+  token: 111
+  aesKey: 111
+  msgDataFormat: JSON
+
+  mchId:
+  mchKey:
+  subAppId:
+  subMchId:
+  keyPath:    

@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,6 +27,8 @@ import com.ao.scanElectricityBis.auth.ScanServerPrincipal.UserType;
 import com.ao.scanElectricityBis.base.ScanElectricityException;
 import com.ao.scanElectricityBis.service.AccountService;
 import com.ao.scanElectricityBis.service.UsersService;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
 
 @Service
 public class ScanServerUserDetailsService implements UserDetailsService {
@@ -38,6 +41,9 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UsersService userServer;
+	
+	@Autowired
+	private PasswordEncoder encoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -72,7 +78,8 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 		return ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getRequest();
 	}
 
-	
+	@Autowired
+	private WxMaService wxService;
 
 	/**
 	 * 加载微信小程序用户信息
@@ -81,11 +88,17 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 	 * @return
 	 * @throws AuthenticationException
 	 */
-	public ScanServerUserDetails loadWxMinAppUser(String openId) throws AuthenticationException {
+	public ScanServerUserDetails loadWxMinAppUser(String authCode) throws AuthenticationException {
+		
 
-		if (Strings.isBlank(openId))
-			throw new BadCredentialsException("用户名不能为空");
+		if (Strings.isBlank(authCode))
+			throw new BadCredentialsException("微信认证码不能为空");
 		try {
+			
+			
+			var wxUserInfo=wxService.getUserService().getSessionInfo(authCode);
+			String openId=wxUserInfo.getOpenid();
+			
 
 			var userItem = this.userServer.getItemByOpenId(openId);
 			if (userItem == null)
@@ -93,8 +106,8 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 
 			ScanServerUserDetails details = new ScanServerUserDetails();
 			details.setUsername(userItem.getName());
-			details.setPassword("");
-
+			details.setPassword(encoder.encode("123456"));
+			details.setOpenId(openId);
 			
 			details.setName(userItem.getName());
 			details.setOperatorId(0);
@@ -107,12 +120,16 @@ public class ScanServerUserDetailsService implements UserDetailsService {
 		
 
 			List<SimpleGrantedAuthority> authors = new ArrayList<>();
+			authors.add(new SimpleGrantedAuthority("ROLE_WXUSER"));
+			details.setAuthorities(authors);
 
-		} catch (ScanElectricityException e) {
+			return details;
+
+		} catch (Exception e) {
 			logger.error("取得用户信息失败:" + e.getMessage(), e);
-			throw new UsernameNotFoundException("取得用户openID=" + openId + "信息失败:" + e.getMessage(), e);
+			throw new UsernameNotFoundException("取得用户code=" + authCode + "信息失败:" + e.getMessage(), e);
 		}
-		throw new UsernameNotFoundException("取得用户openID=" + openId + "信息失败");
+		
 	}
 
 	/**

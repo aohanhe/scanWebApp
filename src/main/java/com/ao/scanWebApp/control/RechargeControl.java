@@ -15,10 +15,16 @@ import com.ao.scanElectricityBis.entity.AccountRecharge;
 import com.ao.scanElectricityBis.service.AccountService;
 import com.ao.scanElectricityBis.service.RechargesService;
 import com.ao.scanWebApp.Result;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 
 import ao.jpaQueryHelper.PageJpaQueryBean;
 import ao.jpaQueryHelper.PagerResult;
+import ao.jpaQueryHelper.annotations.EntityPath;
 import ao.jpaQueryHelper.annotations.JpaQueryBean;
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,6 +44,7 @@ public class RechargeControl {
 	@JpaQueryBean(entityClass=AccountRecharge.class,mainRootPath=QueryDslRootPaths.Root_Recharge)
 	public static class QueryData extends PageJpaQueryBean {
 		@ApiModelProperty(name = "用户ID", dataType = "int")
+		@EntityPath(name="userid")
 		private Integer userId ;
 		@ApiModelProperty(name = "名称", dataType = "string")
 		private String name;
@@ -83,6 +90,23 @@ public class RechargeControl {
 			logger.error("获取用户充值列表出错:"+e.getMessage(),e);
 			return Result.fail("获取用户充值列表出错:"+e.getMessage());
 		}		
+	}
+	
+	@Autowired
+	private WxPayService wxService;
+	
+	@PostMapping("rechargeMoney")	
+	@ApiOperation(value = "用户充值", httpMethod = "POST", notes = "用户充值")
+	public Result<WxPayUnifiedOrderResult> RechargeMoney(@ApiParam @RequestBody  WxPayUnifiedOrderRequest request)
+			throws WxPayException, ScanElectricityException {
+		try {
+						
+			var re = wxService.unifiedOrder(request);
+			return Result.success(re);
+		} catch (Exception ex) {
+			logger.error("生成统一下单数据失败:" + ex.getMessage(), ex);
+			return Result.fail(2, "生成订单失败");
+		}
 	}
 
 }

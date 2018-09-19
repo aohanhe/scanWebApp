@@ -21,7 +21,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 			.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)			
 			.and()			
 			.authorizeRequests()
-			.antMatchers("/api/test/**")
+			.antMatchers("/api/test/**","/api/wx/**")
 			.permitAll()
 			.and()
 			.authorizeRequests()

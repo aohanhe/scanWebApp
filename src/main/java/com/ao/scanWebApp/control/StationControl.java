@@ -1,5 +1,7 @@
 package com.ao.scanWebApp.control;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ao.QueryDslRootPaths;
 import com.ao.scanElectricityBis.base.ScanElectricityException;
+import com.ao.scanElectricityBis.entity.StationMongoEntry;
 import com.ao.scanElectricityBis.entity.StationStationInfo;
 import com.ao.scanElectricityBis.service.StationService;
 import com.ao.scanWebApp.BaseResult;
@@ -20,6 +23,7 @@ import com.ao.scanWebApp.Result;
 
 import ao.jpaQueryHelper.PageJpaQueryBean;
 import ao.jpaQueryHelper.PagerResult;
+import ao.jpaQueryHelper.annotations.EntityPath;
 import ao.jpaQueryHelper.annotations.JpaQueryBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -39,8 +43,10 @@ public class StationControl {
 		@ApiModelProperty(name = "站场名称", dataType = "String")
 		private String name;		
 		@ApiModelProperty(name = "运营商ID", dataType = "int")
+		@EntityPath(name="operatorid",rootPath=QueryDslRootPaths.Root_Station)
 		private Integer operatorId ;
 		@ApiModelProperty(name = "地区编码", dataType = "String")
+		@EntityPath(name="regioncode",rootPath=QueryDslRootPaths.Root_Station)
 		private String regionCode;
 		
 		
@@ -122,6 +128,29 @@ public class StationControl {
 			logger.error("删除站场失败", e);
 			return BaseResult.failResult(1, "删除站场失败");
 		}
+	}
+	
+	
+	@PostMapping("listNear")	
+	@ApiOperation(value = "获取附近站场列表", httpMethod = "POST", notes = "获取附近站场列表")
+	Result<List<StationStationInfo>> list(@ApiParam @RequestBody StationMongoEntry.Pos pos) throws ScanElectricityException {
+		
+		try {
+			if(pos.getLat()==0||pos.getLon()==0) throw new ScanElectricityException("请提供要查询的坐标");
+			
+			return Result
+					.success(service.listNearPosStations(pos.getLon(), pos.getLat()));
+		} catch (Exception e) {
+			logger.error("取得附近站场失败", e);
+			return Result.fail(1, "取得附近站场失败");
+		}
+	}
+	
+	
+	@PostMapping("freePlugerNmber/{stationId}")	
+	@ApiOperation(value = "获取站场空闲插头数", httpMethod = "POST", notes = "获取站场空闲插头数")
+	Result<Integer> StationFreePlugerNumber(@ApiParam @PathVariable int stationId) {
+		return Result.success(service.FreePlugerNumber(stationId));
 	}
 
 

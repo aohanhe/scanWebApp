@@ -91,8 +91,8 @@ public class OperatorControl {
 			return Result.success(service.saveNew(item));
 		}
 		catch (ScanElectricityException e) {
-			logger.error("保存新的运营商失败",e);
-			return Result.fail(1, "保存新的运营商失败");
+			logger.error("保存新的运营商失败:"+e.getMessage(),e);
+			return Result.fail(1, "保存新的运营商失败:"+e.getMessage());
 		}
 		
 	}
@@ -106,8 +106,8 @@ public class OperatorControl {
 			return Result.success(service.saveItem(item));
 		}
 		catch (ScanElectricityException e) {
-			logger.error("保存运营商失败",e);
-			return Result.fail(1, "保存运营商失败");
+			logger.error("保存运营商失败:"+e.getMessage(),e);
+			return Result.fail(1, "保存运营商失败:"+e.getMessage());
 		}
 	}
 	
@@ -120,8 +120,8 @@ public class OperatorControl {
 			service.deleteItemById(id);
 			return BaseResult.successResult();
 		} catch (ScanElectricityException e) {
-			logger.error("删除供应商失败",e);
-			return BaseResult.failResult(1, "删除供应商失败");
+			logger.error("删除供应商失败:"+e.getMessage(),e);
+			return BaseResult.failResult(1, "删除供应商失败:"+e.getMessage());
 		}
 	}
 	

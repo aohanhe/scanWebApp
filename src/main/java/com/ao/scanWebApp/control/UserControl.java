@@ -83,7 +83,9 @@ public class UserControl {
 	public Result<PagerResult<UserInfo>> list(@ApiParam @RequestBody QueryData queryData) throws ScanElectricityException  {
 		try {
 			var list = service.findAllByQueryBeanByPage(queryData);
-			
+			list.getItems().forEach(item->{
+				item.setPwd("");
+			});
 			return Result.success(list);
 		} catch (ScanElectricityException e) {
 			logger.error("查询用户出错:"+e.getMessage(),e);
@@ -97,7 +99,9 @@ public class UserControl {
 	@ApiOperation(value = "获取用户信息", httpMethod = "POST", notes = "获取用户信息")
 	public Result<UserInfo> getItem(@ApiParam @PathVariable int id) throws ScanElectricityException{
 		try {
-			return Result.success(service.findItemById(id, UserInfo.class).block()) ;
+			var item=service.findItemById(id, UserInfo.class).block();
+			item.setPwd("");
+			return Result.success(item) ;
 		} catch (ScanElectricityException e) {
 			logger.error("取得用户信息出错:"+e.getMessage(),e);
 			return Result.fail("查询用户出错:"+e.getMessage());
