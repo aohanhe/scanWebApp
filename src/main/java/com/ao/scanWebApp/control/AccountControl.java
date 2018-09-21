@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/api/accounts")
 @Api(value = "œµÕ≥’ ∫≈API")
-public class AccountContol {
+public class AccountControl {
 	private Logger logger = LoggerFactory.getLogger(BaseAccount.class);
 	@Autowired
 	private AccountService service;

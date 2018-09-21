@@ -52,8 +52,8 @@ public class DeviceControl {
 		@EntityPath(rootPath = QueryDslRootPaths.Root_Station)
 		@ApiModelProperty(name = "µØÇøcode", dataType = "String")
 		private String regionCode;
-		@ApiModelProperty(name = "×´Ì¬", dataType = "boolean")
-		private Boolean status = null;
+		@ApiModelProperty(name = "×´Ì¬", dataType = "int")
+		private Integer status = null;
 
 		public String getRegionCode() {
 			return regionCode;
@@ -63,11 +63,11 @@ public class DeviceControl {
 			this.regionCode = regionCode;
 		}
 
-		public Boolean getStatus() {
+		public Integer getStatus() {
 			return status;
 		}
 
-		public void setStatus(Boolean status) {
+		public void setStatus(Integer status) {
 			this.status = status;
 		}
 
