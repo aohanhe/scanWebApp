@@ -71,6 +71,7 @@ public class ScanServerAuthenticationProvider extends DaoAuthenticationProvider 
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 		
+		
 		/**
 		 * 检查用户的验证码
 		 */
@@ -78,6 +79,8 @@ public class ScanServerAuthenticationProvider extends DaoAuthenticationProvider 
 		
 		super.additionalAuthenticationChecks(userDetails, authentication);
 	}
+	
+	
 	
 	
 	
@@ -89,5 +92,7 @@ public class ScanServerAuthenticationProvider extends DaoAuthenticationProvider 
 			return;
 
 	}
+	
+	
 
 }

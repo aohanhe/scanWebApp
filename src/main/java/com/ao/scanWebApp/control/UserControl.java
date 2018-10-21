@@ -102,7 +102,7 @@ public class UserControl {
 			var item=service.findItemById(id, UserInfo.class).block();
 			item.setPwd("");
 			return Result.success(item) ;
-		} catch (ScanElectricityException e) {
+		} catch (Exception e) {
 			logger.error("取得用户信息出错:"+e.getMessage(),e);
 			return Result.fail("查询用户出错:"+e.getMessage());
 		}
